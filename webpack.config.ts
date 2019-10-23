@@ -59,7 +59,18 @@ const config: webpack.Configuration = {
     extensions: [".tsx", ".ts", ".js"]
   },
   externals: {
-    react: "react",
+    react: {
+      root: "React",
+      commonjs2: "react",
+      commonjs: "react",
+      amd: "react"
+    },
+    "react-dom": {
+      root: "ReactDOM",
+      commonjs2: "react-dom",
+      commonjs: "react-dom",
+      amd: "react-dom"
+    },
     "@emotion/core": "@emotion/core",
     "@emotion/styled": "@emotion/styled"
   },
