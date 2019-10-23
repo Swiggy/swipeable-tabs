@@ -16,11 +16,7 @@
     "@emotion/styled": "^10.0.17",
     "react": "^16.8.0"
   },
-  "dependencies": {
-    "@emotion/core": "^10.0.21",
-    "@emotion/styled": "^10.0.17",
-    "react": "^16.10.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@ahrakio/witty-webpack-declaration-files": "^1.0.3",
     "@babel/core": "^7.6.4",
