@@ -21,8 +21,6 @@ export const TabHeader = ({ index, onClick, width, label, isSelected }) => (
   </TabItem>
 );
 
-const Tab: React.FC<Pick<TabProps, "label">> = ({ children }) => {
+export const Tab: React.FC<Pick<TabProps, "label">> = ({ children }) => {
   return <>{children}</>;
 };
-
-export default Tab;

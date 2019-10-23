@@ -49,7 +49,9 @@ const SwipeView = styled.section`
   overflow-y: auto;
 `;
 
-const SwipeableViews: React.FC<SwipeViewProps> = (props: SwipeViewProps) => {
+const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
+  props: SwipeViewProps
+) => {
   const { views, selectedTab, onSwipe, inkBarRef: hrRef } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const touchData = useRef<ITouchData>();
@@ -251,4 +253,4 @@ const SwipeableViews: React.FC<SwipeViewProps> = (props: SwipeViewProps) => {
   );
 };
 
-export default memo(SwipeableViews);
+export const SwipeableViews = memo(SwipeableViewsComponent);

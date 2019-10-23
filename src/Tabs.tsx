@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useRef,
-  memo,
-  useEffect,
-  FunctionComponentElement
-} from "react";
+import React, { useCallback, useRef, memo, useEffect } from "react";
 import {
   TabsList,
   TabSelector as TabInkBar,
@@ -12,8 +6,8 @@ import {
   TabPane as TabsNavbar,
   ViewPane
 } from "./styles";
-import SwipeableViews from "./SwipeableTabs";
-import Tab, { TabHeader, TabProps } from "./Tab";
+import { SwipeableViews } from "./SwipeableTabs";
+import { Tab, TabHeader, TabProps } from "./Tab";
 
 type TabGroupProps = {
   value: number;
@@ -22,7 +16,7 @@ type TabGroupProps = {
   tabBarStyle?: Object;
   tabPosition?: "top" | "bottom";
   onChange: (selectedTabKey: string) => void;
-  children: Array<FunctionComponentElement<TabProps>>;
+  children: Array<React.FunctionComponentElement<TabProps>>;
 };
 
 const TabGroup: React.FC<TabGroupProps> = ({
@@ -92,4 +86,4 @@ const TabGroup: React.FC<TabGroupProps> = ({
   );
 };
 
-export default memo(TabGroup);
+export const Tabs = memo(TabGroup);
