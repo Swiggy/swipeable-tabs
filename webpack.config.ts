@@ -20,7 +20,7 @@ const config: webpack.Configuration = {
             loader: "babel-loader",
             options: {
               babelrc: false,
-              presets: ["@babel/preset-env"]
+              presets: ["@babel/preset-typescript", "@babel/preset-env"]
             }
           },
           {
