@@ -1,6 +1,6 @@
 {
   "name": "@tarragon/swipeable-tabs",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A utlity for dynamically creating the UI components from a config",
   "keywords": [
     "react",
