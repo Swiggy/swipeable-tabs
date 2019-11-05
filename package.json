@@ -1,6 +1,17 @@
 {
   "name": "@tarragon/swipeable-tabs",
   "version": "0.0.5",
+  "description": "A utlity for dynamically creating the UI components from a config",
+  "keywords": [
+    "react",
+    "tabs",
+    "tab",
+    "ui",
+    "swipe",
+    "component"
+  ],
+  "author": "Shreya <shreyaaatiwari@gmail.com>",
+  "homepage": "https://github.com/shreya0712/swipeable-tabs",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "license": "MIT",
