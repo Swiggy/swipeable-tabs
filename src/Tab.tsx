@@ -1,21 +1,30 @@
 import React, { FC } from "react";
-import { TabItem } from "./styles";
+import { TabItem, TabBarStyle } from "./styles";
 
 export type TabProps = {
   label: string;
   index: number;
-  width?: number;
+  width: number;
   onClick: (e?: React.MouseEvent) => void;
-  isSelected?: boolean;
+  isSelected: boolean;
+  styleProps: TabBarStyle;
 };
 
-export const TabHeader = ({ index, onClick, width, label, isSelected }) => (
+export const TabHeader: React.FC<TabProps> = ({
+  index,
+  onClick,
+  width,
+  label,
+  isSelected,
+  styleProps
+}) => (
   <TabItem
     key={index}
     onClick={onClick}
     data-item={index}
     isSelected={isSelected}
     width={width}
+    styleProps={styleProps}
   >
     {label}
   </TabItem>

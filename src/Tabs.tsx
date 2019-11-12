@@ -4,17 +4,16 @@ import {
   TabSelector as TabInkBar,
   TabGroupContainer,
   TabPane as TabsNavbar,
-  ViewPane
+  ViewPane,
+  defaultTabBarStyle,
+  TabBarStyle
 } from "./styles";
 import { SwipeableViews } from "./SwipeableTabs";
 import { Tab, TabHeader, TabProps } from "./Tab";
 
 type TabGroupProps = {
   value: number;
-  defaultValue?: string;
-  size?: "large" | "medium" | "small";
-  tabBarStyle?: Object;
-  tabPosition?: "top" | "bottom";
+  tabBarStyle?: TabBarStyle; //TODO: make props optional
   onChange: (selectedTabKey: string) => void;
   children: Array<React.FunctionComponentElement<TabProps>>;
 };
@@ -23,13 +22,8 @@ const TabGroup: React.FC<TabGroupProps> = ({
   children = [],
   value,
   onChange,
-  size = "medium",
-  tabPosition = "top"
+  tabBarStyle
 }) => {
-  const styleProps = {
-    size,
-    tabPosition
-  };
   const inkBarRef = useRef<HTMLHRElement>(null);
 
   const handleTabClick = useCallback(
@@ -46,17 +40,16 @@ const TabGroup: React.FC<TabGroupProps> = ({
 
   /** Verify that valid <Tab/> children are being passed */
   useEffect(() => {
-    if (children.some(child => !(child.type === Tab))) {
-      const error = new Error("TabsGroup children need to be of <Tab> type");
-      error.name = "Invalid Children";
-      throw error;
-    }
+    // if (children.some(child => !(child.type === Tab))) {
+    //   const error = new Error("TabsGroup children need to be of <Tab> type");
+    //   error.name = "Invalid Children";
+    //   throw error;
+    // }
   }, [children]);
-
   return (
-    <TabGroupContainer>
-      <TabsNavbar styleProps={styleProps}>
-        <TabsList size={size}>
+    <TabGroupContainer styleProps={tabBarStyle || {}}>
+      <TabsNavbar styleProps={tabBarStyle || {}}>
+        <TabsList styleProps={tabBarStyle || {}}>
           {children.map((child, index) => (
             <TabHeader
               index={index}
@@ -65,6 +58,7 @@ const TabGroup: React.FC<TabGroupProps> = ({
               label={child.props.label}
               isSelected={value === index}
               key={index}
+              styleProps={tabBarStyle || {}}
             />
           ))}
         </TabsList>
@@ -72,6 +66,7 @@ const TabGroup: React.FC<TabGroupProps> = ({
           selectedTab={value}
           tabCount={children.length}
           ref={inkBarRef}
+          styleProps={tabBarStyle || {}}
         />
       </TabsNavbar>
       <ViewPane>
