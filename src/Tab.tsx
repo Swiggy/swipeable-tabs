@@ -8,6 +8,7 @@ export type TabProps = {
   onClick: (e?: React.MouseEvent) => void;
   isSelected: boolean;
   styleProps: TabBarStyle;
+  tabItemCSS?: string;
 };
 
 export const TabHeader: React.FC<TabProps> = ({
@@ -16,7 +17,8 @@ export const TabHeader: React.FC<TabProps> = ({
   width,
   label,
   isSelected,
-  styleProps
+  styleProps,
+  tabItemCSS = ""
 }) => (
   <TabItem
     key={index}
@@ -25,6 +27,7 @@ export const TabHeader: React.FC<TabProps> = ({
     isSelected={isSelected}
     width={width}
     styleProps={styleProps}
+    tabItemCSS={tabItemCSS}
   >
     {label}
   </TabItem>

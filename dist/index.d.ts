@@ -19,15 +19,18 @@ export declare type TabProps = {
     onClick: (e?: React.MouseEvent) => void;
     isSelected: boolean;
     styleProps: TabBarStyle;
+    tabItemCSS?: string;
 };
 export declare const TabHeader: React.FC<TabProps>;
 export declare const Tab: React.FC<Pick<TabProps, "label">>;
 
 declare type TabGroupProps = {
     value: number;
-    tabBarStyle?: TabBarStyle;
+    styleProps?: TabBarStyle;
     onChange: (selectedTabKey: string) => void;
     children: Array<React.FunctionComponentElement<TabProps>>;
+    tabBarCSS?: string;
+    tabItemCSS?: string;
 };
 export declare const Tabs: React.NamedExoticComponent<TabGroupProps>;
 
@@ -88,11 +91,13 @@ export declare type TabBarStyle = {
 };
 export interface ITabsList {
     styleProps?: TabBarStyle;
+    tabBarCSS: string;
 }
 interface ITab {
     isSelected: boolean;
     width: number;
     styleProps: TabBarStyle;
+    tabItemCSS: string;
 }
 interface IStyleProps {
     styleProps?: TabBarStyle;

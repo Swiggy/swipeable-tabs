@@ -1,9 +1,7 @@
 [![Build Status][build-shield]]()
 [![MIT License][license-shield]][license-url]
 [![Contributors][contributors-shield]]()
-
-<!-- <img src="https://img.badgesize.io/paramsinghvc/mason/master/dist/index.js?style=for-the-badge&compression=gzip&label=gzip+size&max=8000&softmax=4000"> -->
-
+<img src="https://img.badgesize.io/shreya0712/swipeable-tabs/master/dist/index.js?style=for-the-badge&compression=gzip&label=gzip+size&max=8000&softmax=4000">
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
   <p align="center"><h2 align="center">Swipeable Tabs</h2></p>

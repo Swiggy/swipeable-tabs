@@ -41,11 +41,13 @@ export type TabBarStyle = {
 
 export interface ITabsList {
   styleProps?: TabBarStyle;
+  tabBarCSS: string;
 }
 interface ITab {
   isSelected: boolean;
   width: number;
   styleProps: TabBarStyle;
+  tabItemCSS: string;
 }
 interface IStyleProps {
   styleProps?: TabBarStyle;
@@ -84,6 +86,7 @@ export const TabsList = styled.section<ITabsList>`
   display: flex;
   height: inherit;
   text-align: center;
+  ${({ tabBarCSS }) => tabBarCSS};
 `;
 
 export const TabGroupContainer = styled.div<ITabGroup>`
@@ -130,6 +133,7 @@ export const TabItem = styled.section<ITab>`
     tabSizes[styleProps.size || defaultTabBarStyle.size].height};
   text-align: ${({ styleProps }) =>
     styleProps.alignHeader || defaultTabBarStyle.alignHeader};
+  ${({ tabItemCSS }) => tabItemCSS}
 `;
 
 export const TabSelector = styled.hr<ITabHighlight>`
