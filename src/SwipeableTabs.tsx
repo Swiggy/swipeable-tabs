@@ -29,10 +29,11 @@ type SwipeViewProps = {
 
 export interface ISwipeContainer {
   transform: string;
+  viewCount: number;
 }
 
 export const SwipeableContainer = styled.section<ISwipeContainer>`
-  width: 400%;
+  width: ${({ viewCount }) => `${viewCount * 100}%`};
   display: flex;
   position: relative;
   height: inherit;
@@ -40,11 +41,10 @@ export const SwipeableContainer = styled.section<ISwipeContainer>`
   /* transition: 0.5s ease-in-out; */
 `;
 
-const SwipeView = styled.section`
-  width: 25%;
+const SwipeView = styled.section<{ viewCount }>`
+  width: ${({ viewCount }) => `${viewCount ? 100 / viewCount : 0}%`};
   position: relative;
   min-height: 100%;
-  background: ${({ color }) => color};
   user-select: none;
   overflow-y: auto;
 `;
@@ -146,13 +146,14 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
       const currentOffset = viewWidth * selectedTab;
       el.style.transform = `translateX(-${currentOffset -
         touchData.current.deltaX}px)`;
-
-      hrRef.current.style.transition = "none";
-      hrRef.current.style.marginLeft = `${((currentOffset -
-        touchData.current.deltaX) /
-        viewWidth) *
-        hrRef.current.clientWidth}px`;
-      hrRef.current.style.transition = "0.1s ease-in-out";
+      if (hrRef) {
+        hrRef.current.style.transition = "none";
+        hrRef.current.style.marginLeft = `${((currentOffset -
+          touchData.current.deltaX) /
+          viewWidth) *
+          hrRef.current.clientWidth}px`;
+        hrRef.current.style.transition = "0.1s ease-in-out";
+      }
     },
     [touchData, containerRef, selectedTab, views, isExtreme, hrRef]
   );
@@ -199,13 +200,17 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         onSwipe(updatedPage.toString());
         el.style.transform = `translateX(-${(updatedPage / views.length) *
           100}%)`;
-        hrRef.current.style.marginLeft = `${(updatedPage / views.length) *
-          100}%`;
+        if (hrRef) {
+          hrRef.current.style.marginLeft = `${(updatedPage / views.length) *
+            100}%`;
+        }
       } else {
         el.style.transform = `translateX(-${(selectedTab / views.length) *
           100}%)`;
-        hrRef.current.style.marginLeft = `${(selectedTab / views.length) *
-          100}%`;
+        if (hrRef) {
+          hrRef.current.style.marginLeft = `${(selectedTab / views.length) *
+            100}%`;
+        }
       }
     },
     [touchData, containerRef, views, selectedTab, onSwipe, isExtreme, hrRef]
@@ -245,9 +250,14 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
     <SwipeableContainer
       ref={containerRef}
       transform={`translateX(-${(selectedTab / views.length) * 100}%)`}
+      viewCount={safeGet(props, "views.length", 0)}
     >
       {props.views.map((view, index) => {
-        return <SwipeView key={index}>{view}</SwipeView>;
+        return (
+          <SwipeView key={index} viewCount={safeGet(props, "views.length", 0)}>
+            {view}
+          </SwipeView>
+        );
       })}
     </SwipeableContainer>
   );
