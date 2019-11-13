@@ -8,6 +8,7 @@ declare type SwipeViewProps = {
 };
 export interface ISwipeContainer {
     transform: string;
+    viewCount: number;
 }
 export declare const SwipeableContainer: import("@emotion/styled-base").StyledComponent<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>, ISwipeContainer, object>;
 export declare const SwipeableViews: React.NamedExoticComponent<SwipeViewProps>;
