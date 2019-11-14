@@ -22,7 +22,10 @@ type ITouchData = {
 type SwipeViewProps = {
   views: JSX.Element[];
   onSwipe: (selectedTab: number) => void;
-  blacklistedElement?: string;
+  blacklistedElement?: {
+    identifierType: "className" | "id" | "nodeName";
+    identifierName: string;
+  };
   inkBarRef: any;
   selectedView: number;
   // tabLabels: React.MutableRefObject<string[]>;
@@ -77,6 +80,19 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
     [selectedView, views, touchData]
   );
 
+  const isTargetBlacklisted = useCallback(
+    e => {
+      if (!props.blacklistedElement) return false;
+      const isBlocked = e.path.filter(
+        item =>
+          safeGet(item, `${props.blacklistedElement!.identifierType}`) ===
+          props.blacklistedElement!.identifierName
+      );
+      return isBlocked.length > 0;
+    },
+    [props.blacklistedElement]
+  );
+
   const handlePanStart = useCallback(
     (e: TouchEvent | PointerEvent | MouseEvent) => {
       let currentX, currentY;
@@ -97,7 +113,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         deltaY: 0,
         velocityX: 0,
         velocityY: 0,
-        isTargetBlacklisted: false,
+        isTargetBlacklisted: isTargetBlacklisted(e),
         startTime: e.timeStamp,
         currentTime: e.timeStamp,
         deltaTime: 0,
@@ -125,6 +141,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
       // const selectedTab = tabLabels.current.indexOf(selectedTabName);
 
       if (!touchData.current) return;
+      if (touchData.current.isTargetBlacklisted) return;
       touchData.current = {
         ...touchData.current,
         target: e.target as HTMLElement,
@@ -139,7 +156,8 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
           (currentY - touchData.current.startY) /
           (e.timeStamp - touchData.current.startTime),
         currentTime: e.timeStamp,
-        deltaTime: e.timeStamp - touchData.current.startTime
+        deltaTime: e.timeStamp - touchData.current.startTime,
+        isTargetBlacklisted: isTargetBlacklisted(e)
       };
       if (
         Math.abs(touchData.current.velocityX) <
@@ -180,9 +198,9 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         currentX = (e as PointerEvent).pageX;
         currentY = (e as PointerEvent).pageY;
       }
-
       // const selectedTab = tabLabels.current.indexOf(selectedTabName);
       if (!touchData.current) return;
+      if (touchData.current.isTargetBlacklisted) return;
       touchData.current = {
         ...touchData.current,
         target: e.target as HTMLElement,
@@ -198,7 +216,8 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
           (e.timeStamp - touchData.current.startTime),
         currentTime: e.timeStamp,
         deltaTime: e.timeStamp - touchData.current.startTime,
-        pointerActive: false
+        pointerActive: false,
+        isTargetBlacklisted: isTargetBlacklisted(e)
       };
       if (
         Math.abs(touchData.current.velocityX) <
@@ -216,13 +235,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         const direction =
           touchData.current.deltaX / Math.abs(touchData.current.deltaX);
         const updatedPage = selectedView - direction;
-        onSwipe(
-          updatedPage
-          //   {
-          //   label: tabLabels.current[updatedPage],
-          //   key: views[updatedPage].key || updatedPage
-          // }
-        );
+        onSwipe(updatedPage);
         el.style.transform = `translateX(-${(updatedPage / views.length) *
           100}%)`;
         if (hrRef) {

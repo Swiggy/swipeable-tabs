@@ -18,6 +18,10 @@ type TabGroupProps = {
   children: Array<React.FunctionComponentElement<TabProps>>;
   tabBarCSS?: string;
   tabItemCSS?: string;
+  blacklistedElement?: {
+    identifierType: "className" | "id" | "nodeName";
+    identifierName: string;
+  };
 };
 
 const TabGroup: React.FC<TabGroupProps> = ({
@@ -26,7 +30,8 @@ const TabGroup: React.FC<TabGroupProps> = ({
   onChange,
   styleProps = {},
   tabBarCSS = "",
-  tabItemCSS = ""
+  tabItemCSS = "",
+  blacklistedElement = undefined
 }) => {
   const inkBarRef = useRef<HTMLHRElement>(null);
   const tabLabels = useRef<Array<string>>([]);
@@ -94,6 +99,7 @@ const TabGroup: React.FC<TabGroupProps> = ({
           onSwipe={handleSwipe}
           selectedView={children.map(child => child.props.label).indexOf(value)}
           inkBarRef={inkBarRef}
+          blacklistedElement={blacklistedElement}
           // selectedTabName={value}
           // tabLabels={tabLabels}
         />
