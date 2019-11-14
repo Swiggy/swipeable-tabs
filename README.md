@@ -261,6 +261,7 @@ import { SwipeableViews } from "./@tarragon/swipeable-tabs";
 - [React](https://reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Webpack](https://webpack.js.org/)
+- ❤️
 
 <!-- LICENSE -->
 
