@@ -12,9 +12,9 @@ import { SwipeableViews } from "./SwipeableTabs";
 import { Tab, TabHeader, TabProps } from "./Tab";
 
 type TabGroupProps = {
-  value: number;
+  value: string;
   styleProps?: TabBarStyle;
-  onChange: (selectedTabKey: string) => void;
+  onChange: (selectedTab: { label: string; key: string | number }) => void;
   children: Array<React.FunctionComponentElement<TabProps>>;
   tabBarCSS?: string;
   tabItemCSS?: string;
@@ -29,57 +29,73 @@ const TabGroup: React.FC<TabGroupProps> = ({
   tabItemCSS = ""
 }) => {
   const inkBarRef = useRef<HTMLHRElement>(null);
-
+  const tabLabels = useRef<Array<string>>([]);
+  const handleSwipe = useCallback(
+    (selectedTab: number) => {
+      onChange({
+        label: tabLabels.current[selectedTab],
+        key: children[selectedTab].key || selectedTab
+      });
+    },
+    [tabLabels, children]
+  );
   const handleTabClick = useCallback(
-    (index: number) => () => {
-      onChange("" + index);
+    (tabName: string, tabKey: number | string) => () => {
+      const tabIndex = tabLabels.current.indexOf(tabName);
+      onChange({ label: tabName, key: tabKey });
       if (!inkBarRef.current) return;
       const inkBarStyle = inkBarRef.current.style;
       inkBarStyle.transition = "none";
-      inkBarStyle.marginLeft = `${(index / children.length) * 100}%`;
+      inkBarStyle.marginLeft = `${(tabIndex / children.length) * 100}%`;
       inkBarStyle.transition = "0.1s ease-in-out";
     },
-    [onChange, children]
+    [onChange, children, tabLabels.current, inkBarRef]
   );
 
-  /** Verify that valid <Tab/> children are being passed */
   useEffect(() => {
-    // if (children.some(child => !(child.type === Tab))) {
-    //   const error = new Error("TabsGroup children need to be of <Tab> type");
-    //   error.name = "Invalid Children";
-    //   throw error;
-    // }
-  }, [children]);
+    tabLabels.current = children.map(child => child.props.label);
+  }, []);
+
+  /** Verify that valid <Tab/> children are being passed */
+  // useEffect(() => {
+  //   if (children.some(child => !(child.type === Tab))) {
+  //     const error = new Error("TabsGroup children need to be of <Tab> type");
+  //     error.name = "Invalid Children";
+  //     throw error;
+  //   }
+  // }, [children]);
   return (
     <TabGroupContainer styleProps={styleProps}>
       <TabsNavbar styleProps={styleProps}>
         <TabsList styleProps={styleProps} tabBarCSS={tabBarCSS}>
           {children.map((child, index) => (
             <TabHeader
-              index={index}
-              onClick={handleTabClick(index)}
+              index={child.key || index}
+              onClick={handleTabClick(child.props.label, child.key || index)}
               width={100 / children.length}
               label={child.props.label}
-              isSelected={value === index}
-              key={index}
-              styleProps={styleProps || {}}
+              isSelected={value === child.props.label}
+              key={child.props.label}
+              styleProps={styleProps}
               tabItemCSS={tabItemCSS}
             />
           ))}
         </TabsList>
         <TabInkBar
-          selectedTab={value}
+          selectedTab={children.map(child => child.props.label).indexOf(value)}
           tabCount={children.length}
           ref={inkBarRef}
-          styleProps={styleProps || {}}
+          styleProps={styleProps}
         />
       </TabsNavbar>
       <ViewPane>
         <SwipeableViews
           views={children}
-          onSwipe={onChange}
-          selectedTab={value}
+          onSwipe={handleSwipe}
+          selectedView={children.map(child => child.props.label).indexOf(value)}
           inkBarRef={inkBarRef}
+          // selectedTabName={value}
+          // tabLabels={tabLabels}
         />
       </ViewPane>
     </TabGroupContainer>

@@ -138,10 +138,9 @@ export const TabItem = styled.section<ITab>`
 
 export const TabSelector = styled.hr<ITabHighlight>`
   margin: 0px;
-  /* margin-left: ${props =>
-    `${(props.selectedTab / props.tabCount) * 100}%`}; */
+
   width: ${props => `${100 / props.tabCount}%`};
-  border:${({ styleProps }) =>
+  border: ${({ styleProps }) =>
     safeGet(styleProps, "showInkBar", true)
       ? `${safeGet(
           styleProps,
@@ -149,7 +148,11 @@ export const TabSelector = styled.hr<ITabHighlight>`
           defaultTabBarStyle.activeInkBarColor
         )} solid 1px`
       : "none"};
-  
+  margin-left: ${({ selectedTab, tabCount }) =>
+    `${(100 / tabCount) * selectedTab}%`};
   transition: 0.1s ease-in-out;
   /* display:none; */
 `;
+
+/* margin-left: ${props =>
+    `${(props.selectedTab / props.tabCount) * 100}%`}; */

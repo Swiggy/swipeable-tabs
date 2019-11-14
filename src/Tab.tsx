@@ -3,7 +3,7 @@ import { TabItem, TabBarStyle } from "./styles";
 
 export type TabProps = {
   label: string;
-  index: number;
+  index: string | number;
   width: number;
   onClick: (e?: React.MouseEvent) => void;
   isSelected: boolean;
@@ -19,19 +19,21 @@ export const TabHeader: React.FC<TabProps> = ({
   isSelected,
   styleProps,
   tabItemCSS = ""
-}) => (
-  <TabItem
-    key={index}
-    onClick={onClick}
-    data-item={index}
-    isSelected={isSelected}
-    width={width}
-    styleProps={styleProps}
-    tabItemCSS={tabItemCSS}
-  >
-    {label}
-  </TabItem>
-);
+}) => {
+  return (
+    <TabItem
+      key={index}
+      onClick={onClick}
+      data-item={index}
+      isSelected={isSelected}
+      width={width}
+      styleProps={styleProps}
+      tabItemCSS={tabItemCSS}
+    >
+      {label}
+    </TabItem>
+  );
+};
 
 export const Tab: React.FC<Pick<TabProps, "label">> = ({ children }) => {
   return <>{children}</>;

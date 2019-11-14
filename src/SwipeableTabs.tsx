@@ -21,10 +21,12 @@ type ITouchData = {
 
 type SwipeViewProps = {
   views: JSX.Element[];
-  onSwipe: (selectedTabKey: string) => void;
-  selectedTab: number;
+  onSwipe: (selectedTab: number) => void;
   blacklistedElement?: string;
   inkBarRef: any;
+  selectedView: number;
+  // tabLabels: React.MutableRefObject<string[]>;
+  // selectedTabName: string;
 };
 
 export interface ISwipeContainer {
@@ -52,18 +54,19 @@ const SwipeView = styled.section<{ viewCount }>`
 const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
   props: SwipeViewProps
 ) => {
-  const { views, selectedTab, onSwipe, inkBarRef: hrRef } = props;
+  const { views, onSwipe, inkBarRef: hrRef, selectedView } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const touchData = useRef<ITouchData>();
   const isExtreme = useCallback(
     e => {
       if (!touchData.current) return;
+      // const selectedTab = tabLabels.current.indexOf(selectedTabName);
       if (
-        (selectedTab === 0 &&
+        (selectedView === 0 &&
           Math.abs(touchData.current.deltaX) /
             safeGet(touchData, "current.deltaX", 1) ===
             1) ||
-        (selectedTab === views.length - 1 &&
+        (selectedView === views.length - 1 &&
           Math.abs(touchData.current.deltaX) /
             safeGet(touchData, "current.deltaX", 1) ===
             -1)
@@ -71,7 +74,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         return true;
       return false;
     },
-    [selectedTab, views, touchData]
+    [selectedView, views, touchData]
   );
 
   const handlePanStart = useCallback(
@@ -119,6 +122,8 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         currentX = (e as PointerEvent).pageX;
         currentY = (e as PointerEvent).pageY;
       }
+      // const selectedTab = tabLabels.current.indexOf(selectedTabName);
+
       if (!touchData.current) return;
       touchData.current = {
         ...touchData.current,
@@ -136,6 +141,12 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         currentTime: e.timeStamp,
         deltaTime: e.timeStamp - touchData.current.startTime
       };
+      if (
+        Math.abs(touchData.current.velocityX) <
+        Math.abs(touchData.current.velocityY)
+      ) {
+        return;
+      }
       const el = containerRef.current;
       if (!el || isExtreme(e)) {
         return;
@@ -143,7 +154,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
       const viewWidth =
         safeGet(containerRef, "current.clientWidth", 0) / views.length;
 
-      const currentOffset = viewWidth * selectedTab;
+      const currentOffset = viewWidth * selectedView;
       el.style.transform = `translateX(-${currentOffset -
         touchData.current.deltaX}px)`;
       if (hrRef) {
@@ -155,7 +166,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         hrRef.current.style.transition = "0.1s ease-in-out";
       }
     },
-    [touchData, containerRef, selectedTab, views, isExtreme, hrRef]
+    [touchData, containerRef, selectedView, views, isExtreme, hrRef]
   );
 
   const handlePanEnd = useCallback(
@@ -169,6 +180,8 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         currentX = (e as PointerEvent).pageX;
         currentY = (e as PointerEvent).pageY;
       }
+
+      // const selectedTab = tabLabels.current.indexOf(selectedTabName);
       if (!touchData.current) return;
       touchData.current = {
         ...touchData.current,
@@ -196,8 +209,14 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
       if (Math.abs(touchData.current.deltaX) > viewWidth / 3) {
         const direction =
           touchData.current.deltaX / Math.abs(touchData.current.deltaX);
-        const updatedPage = selectedTab - direction;
-        onSwipe(updatedPage.toString());
+        const updatedPage = selectedView - direction;
+        onSwipe(
+          updatedPage
+          //   {
+          //   label: tabLabels.current[updatedPage],
+          //   key: views[updatedPage].key || updatedPage
+          // }
+        );
         el.style.transform = `translateX(-${(updatedPage / views.length) *
           100}%)`;
         if (hrRef) {
@@ -205,23 +224,24 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
             100}%`;
         }
       } else {
-        el.style.transform = `translateX(-${(selectedTab / views.length) *
+        el.style.transform = `translateX(-${(selectedView / views.length) *
           100}%)`;
         if (hrRef) {
-          hrRef.current.style.marginLeft = `${(selectedTab / views.length) *
+          hrRef.current.style.marginLeft = `${(selectedView / views.length) *
             100}%`;
         }
       }
     },
-    [touchData, containerRef, views, selectedTab, onSwipe, isExtreme, hrRef]
+    [touchData, containerRef, views, selectedView, onSwipe, isExtreme, hrRef]
   );
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    el.style.transform = `translateX(-${(selectedTab / views.length) * 100}%)`;
+    // const selectedTab =  tabLabels.current.indexOf(selectedTabName);
+    el.style.transform = `translateX(-${(selectedView / views.length) * 100}%)`;
     el.style.transition = "0.1s ease-in-out";
-  }, [selectedTab, containerRef, views]);
+  }, [selectedView, containerRef, views]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -244,12 +264,12 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
       el.removeEventListener("mousemove", handlePanMove, false);
       // el.removeEventListener("mouseout", handlePanEnd, false);
     };
-  }, [containerRef, handlePanStart, handlePanMove, handlePanEnd, selectedTab]);
+  }, [containerRef, handlePanStart, handlePanMove, handlePanEnd]);
 
   return (
     <SwipeableContainer
       ref={containerRef}
-      transform={`translateX(-${(selectedTab / views.length) * 100}%)`}
+      transform={`translateX(-${(selectedView / views.length) * 100}%)`}
       viewCount={safeGet(props, "views.length", 0)}
     >
       {props.views.map((view, index) => {

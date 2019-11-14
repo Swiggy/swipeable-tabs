@@ -1,10 +1,10 @@
 
 declare type SwipeViewProps = {
     views: JSX.Element[];
-    onSwipe: (selectedTabKey: string) => void;
-    selectedTab: number;
+    onSwipe: (selectedTab: number) => void;
     blacklistedElement?: string;
     inkBarRef: any;
+    selectedView: number;
 };
 export interface ISwipeContainer {
     transform: string;
@@ -15,7 +15,7 @@ export declare const SwipeableViews: React.NamedExoticComponent<SwipeViewProps>;
 
 export declare type TabProps = {
     label: string;
-    index: number;
+    index: string | number;
     width: number;
     onClick: (e?: React.MouseEvent) => void;
     isSelected: boolean;
@@ -26,9 +26,12 @@ export declare const TabHeader: React.FC<TabProps>;
 export declare const Tab: React.FC<Pick<TabProps, "label">>;
 
 declare type TabGroupProps = {
-    value: number;
+    value: string;
     styleProps?: TabBarStyle;
-    onChange: (selectedTabKey: string) => void;
+    onChange: (selectedTab: {
+        label: string;
+        key: string | number;
+    }) => void;
     children: Array<React.FunctionComponentElement<TabProps>>;
     tabBarCSS?: string;
     tabItemCSS?: string;
