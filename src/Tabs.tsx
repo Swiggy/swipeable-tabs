@@ -66,8 +66,8 @@ const TabGroup: React.FC<TabGroupProps> = ({
   // }, [children]);
   return (
     <TabGroupContainer styleProps={styleProps}>
-      <TabsNavbar styleProps={styleProps}>
-        <TabsList styleProps={styleProps} tabBarCSS={tabBarCSS}>
+      <TabsNavbar styleProps={styleProps} tabBarCSS={tabBarCSS}>
+        <TabsList styleProps={styleProps}>
           {children.map((child, index) => (
             <TabHeader
               index={child.key || index}

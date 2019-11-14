@@ -41,7 +41,7 @@ export type TabBarStyle = {
 
 export interface ITabsList {
   styleProps?: TabBarStyle;
-  tabBarCSS: string;
+  // tabBarCSS: string;
 }
 interface ITab {
   isSelected: boolean;
@@ -51,6 +51,7 @@ interface ITab {
 }
 interface IStyleProps {
   styleProps?: TabBarStyle;
+  tabBarCSS?: string;
 }
 interface ITabGroup {
   styleProps: TabBarStyle;
@@ -75,6 +76,7 @@ export const TabPane = styled.div<IStyleProps>`
           defaultTabBarStyle.inkBarColor
         )} solid 1px`
       : "none"};
+  ${({ tabBarCSS }) => tabBarCSS};
 `;
 export const ViewPane = styled.div`
   height: 100%;
@@ -86,7 +88,6 @@ export const TabsList = styled.section<ITabsList>`
   display: flex;
   height: inherit;
   text-align: center;
-  ${({ tabBarCSS }) => tabBarCSS};
 `;
 
 export const TabGroupContainer = styled.div<ITabGroup>`
