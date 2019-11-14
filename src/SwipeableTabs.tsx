@@ -200,6 +200,12 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         deltaTime: e.timeStamp - touchData.current.startTime,
         pointerActive: false
       };
+      if (
+        Math.abs(touchData.current.velocityX) <
+        Math.abs(touchData.current.velocityY)
+      ) {
+        return;
+      }
       const el = containerRef.current;
       if (!el || isExtreme(e)) return;
       el.style.transition = `0.1s ease-in-out`;
