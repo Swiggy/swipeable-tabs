@@ -6,7 +6,11 @@
 
   <p align="center"><h2 align="center">Swipeable Tabs</h2></p>
 
-Easy to incorporate Tabs Component for React, where tabs can be switched by swiping across the screen, as well as the conventional clicking on tab names.
+Easy to incorporate and highly customizable Tabs Component for React, where tabs can be switched by swiping across the screen, as well as the conventional clicking on tab names way. Supports all types of devices.
+
+<div align="center">
+<img src="https://media.giphy.com/media/fAatVk286W3DlYt1yq/giphy.gif" height="100px" width="100px">
+</div>
 
 ## Getting Started
 
@@ -14,9 +18,9 @@ Easy to incorporate Tabs Component for React, where tabs can be switched by swip
 
 Following Peer Dependencies are required for using this library:
 
-- react: ^16.8.0
-- @emotion/core: ^10.0.17,
-- @emotion/styled: ^10.0.17,
+- <b>react</b>: ^16.8.0
+- <b>@emotion/core</b>: ^10.0.17,
+- <b>@emotion/styled</b>: ^10.0.17,
 
 ### Installation
 
@@ -34,9 +38,8 @@ yarn add @tarragon/swipeable-tabs
 
 ### Examples
 
-Checkout the basic usage <a href="https://codesandbox.io/s/swipeable-tabs-default-t6fim">here</a>.
-
-Various customisations can be added to the component like <a href="https://codesandbox.io/s/swipable-tabs-demo-0wpzm">this</a>.
+Checkout the basic usage <a href="https://codesandbox.io/s/swipeable-tabs-default-t6fim">here</a>.<br/>
+Various customisations can also be added to the component like <a href="https://codesandbox.io/s/swipable-tabs-demo-0wpzm">this</a>.
 
 ### Quick Usage
 
