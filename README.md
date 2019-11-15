@@ -5,7 +5,6 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
   <p align="center"><h2 align="center">Swipeable Tabs</h2></p>
-  <hr/>
 
 Easy to incorporate Tabs Component for React, where tabs can be switched by swiping across the screen, as well as the conventional clicking on tab names.
 
@@ -33,7 +32,11 @@ yarn add @tarragon/swipeable-tabs
 
 ## Usage
 
-### Checkout the demo <a href="https://codesandbox.io/s/swipable-tabs-demo-0wpzm">here</a>.
+### Examples
+
+Checkout the basic usage <a href="https://codesandbox.io/s/swipeable-tabs-default-t6fim">here</a>.
+
+Various customisations can be added to the component like <a href="https://codesandbox.io/s/swipable-tabs-demo-0wpzm">this</a>.
 
 ### Quick Usage
 
@@ -55,34 +58,16 @@ A number of <em>Tab</em> components can be passed as children of the <em>Tabs</e
 ```tsx
 <Tabs value={selectedTab} onChange={changeTab}>
   <Tab label="Tab 1" key={0}>
-    <div
-      style={{
-        height: "500px",
-        backgroundImage: "linear-gradient(black, white)"
-      }}
-    >
-      Tab 1 Content
-    </div>
+    <div>Tab 1 Content</div>
   </Tab>
   <Tab label="Tab 2" key={1}>
-    <div
-      style={{
-        height: "500px",
-        backgroundImage: "linear-gradient(green, yellow)"
-      }}
-    >
-      Tab 2 content
-    </div>
+    <div>Tab 2 content</div>
   </Tab>
   <Tab label="Tab 3" key={2}>
-    <div
-      style={{
-        height: "500px",
-        backgroundImage: "linear-gradient(purple, pink)"
-      }}
-    >
-      Tab 3 content
-    </div>
+    <div>Tab 3 content</div>
+  </Tab>
+  <Tab label="Tab 4" key={3}>
+    <div>Tab 4 content</div>
   </Tab>
 </Tabs>
 ```
