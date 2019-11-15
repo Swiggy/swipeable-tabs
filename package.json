@@ -1,6 +1,6 @@
 {
   "name": "@tarragon/swipeable-tabs",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "React Tabs Component That supports Swiping across screen to switch tabs",
   "keywords": [
     "react",
