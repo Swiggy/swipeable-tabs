@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { css, jsx } from "@emotion/core";
 import safeGet from "./safeGet";
 
 const tabSizes = {

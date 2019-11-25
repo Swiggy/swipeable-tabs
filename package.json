@@ -23,7 +23,7 @@
     "publish:npm": "npm publish --access public"
   },
   "peerDependencies": {
-    "@emotion/core": "^10.0.22",
+    "@emotion/core": "^10.0.17",
     "@emotion/styled": "^10.0.17",
     "react": "^16.8.0"
   },
