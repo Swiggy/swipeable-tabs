@@ -138,7 +138,7 @@ export const TabItem = styled.section<ITab>`
 `;
 
 export const TabSelector = styled.hr<ITabHighlight>`
-  margin: 0px;
+  margin: -2px 0px 0px 0px;
 
   width: ${props => `${100 / props.tabCount}%`};
   border: ${({ styleProps }) =>
