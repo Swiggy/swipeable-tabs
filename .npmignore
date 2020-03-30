@@ -3,3 +3,5 @@ node_modules
 examples
 tsconfig.json
 webpack.config.ts
+yarn.lock
+yarn-error.log
