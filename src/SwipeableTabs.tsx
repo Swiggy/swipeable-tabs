@@ -219,7 +219,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         pointerActive: false,
         isTargetBlacklisted: isTargetBlacklisted(e)
       };
-      if (
+      if (!(e.type === "touchend" || e.type === "mouseup") &&
         Math.abs(touchData.current.velocityX) <
         Math.abs(touchData.current.velocityY)
       ) {
