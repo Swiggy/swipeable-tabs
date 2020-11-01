@@ -1,8 +1,9 @@
-import React, { FC } from "react";
-import { TabItem, TabBarStyle } from "./styles";
+import React, { FC, Component } from 'react';
+import { TabItem, TabBarStyle } from './styles';
 
 export type TabProps = {
   label: string;
+  icon?: Component;
   index: string | number;
   width: number;
   onClick: (e?: React.MouseEvent) => void;
@@ -11,14 +12,15 @@ export type TabProps = {
   tabItemCSS?: string;
 };
 
-export const TabHeader: React.FC<TabProps> = ({
+export const TabHeader: FC<TabProps> = ({
   index,
   onClick,
   width,
   label,
+  icon,
   isSelected,
   styleProps,
-  tabItemCSS = ""
+  tabItemCSS = '',
 }) => {
   return (
     <TabItem
@@ -30,11 +32,11 @@ export const TabHeader: React.FC<TabProps> = ({
       styleProps={styleProps}
       tabItemCSS={tabItemCSS}
     >
-      {label}
+      {icon ? icon : label}
     </TabItem>
   );
 };
 
-export const Tab: React.FC<Pick<TabProps, "label">> = ({ children }) => {
+export const Tab: FC<Pick<TabProps, 'label'>> = ({ children }) => {
   return <>{children}</>;
 };

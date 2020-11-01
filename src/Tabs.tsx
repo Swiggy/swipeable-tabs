@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, memo, useEffect } from "react";
+import React, { useCallback, useRef, memo, useEffect } from 'react';
 import {
   TabsList,
   TabSelector as TabInkBar,
@@ -6,10 +6,10 @@ import {
   TabPane as TabsNavbar,
   ViewPane,
   defaultTabBarStyle,
-  TabBarStyle
-} from "./styles";
-import { SwipeableViews } from "./SwipeableTabs";
-import { Tab, TabHeader, TabProps } from "./Tab";
+  TabBarStyle,
+} from './styles';
+import { SwipeableViews } from './SwipeableTabs';
+import { Tab, TabHeader, TabProps } from './Tab';
 
 type TabGroupProps = {
   value: string;
@@ -19,7 +19,7 @@ type TabGroupProps = {
   tabBarCSS?: string;
   tabItemCSS?: string;
   blacklistedElement?: {
-    identifierType: "className" | "id" | "nodeName";
+    identifierType: 'className' | 'id' | 'nodeName';
     identifierName: string;
   };
 };
@@ -29,9 +29,9 @@ const TabGroup: React.FC<TabGroupProps> = ({
   value,
   onChange,
   styleProps = {},
-  tabBarCSS = "",
-  tabItemCSS = "",
-  blacklistedElement = undefined
+  tabBarCSS = '',
+  tabItemCSS = '',
+  blacklistedElement = undefined,
 }) => {
   const inkBarRef = useRef<HTMLHRElement>(null);
   const tabLabels = useRef<Array<string>>([]);
@@ -39,7 +39,7 @@ const TabGroup: React.FC<TabGroupProps> = ({
     (selectedTab: number) => {
       onChange({
         label: tabLabels.current[selectedTab],
-        key: children[selectedTab].key || selectedTab
+        key: children[selectedTab].key || selectedTab,
       });
     },
     [tabLabels, children]
@@ -50,15 +50,15 @@ const TabGroup: React.FC<TabGroupProps> = ({
       onChange({ label: tabName, key: tabKey });
       if (!inkBarRef.current) return;
       const inkBarStyle = inkBarRef.current.style;
-      inkBarStyle.transition = "none";
+      inkBarStyle.transition = 'none';
       inkBarStyle.marginLeft = `${(tabIndex / children.length) * 100}%`;
-      inkBarStyle.transition = "0.1s ease-in-out";
+      inkBarStyle.transition = '0.1s ease-in-out';
     },
     [onChange, children, tabLabels.current, inkBarRef]
   );
 
   useEffect(() => {
-    tabLabels.current = children.map(child => child.props.label);
+    tabLabels.current = children.map((child) => child.props.label);
   }, []);
 
   /** Verify that valid <Tab/> children are being passed */
@@ -79,6 +79,7 @@ const TabGroup: React.FC<TabGroupProps> = ({
               onClick={handleTabClick(child.props.label, child.key || index)}
               width={100 / children.length}
               label={child.props.label}
+              icon={child.props.icon}
               isSelected={value === child.props.label}
               key={child.props.label}
               styleProps={styleProps}
@@ -87,7 +88,9 @@ const TabGroup: React.FC<TabGroupProps> = ({
           ))}
         </TabsList>
         <TabInkBar
-          selectedTab={children.map(child => child.props.label).indexOf(value)}
+          selectedTab={children
+            .map((child) => child.props.label)
+            .indexOf(value)}
           tabCount={children.length}
           ref={inkBarRef}
           styleProps={styleProps}
@@ -97,7 +100,9 @@ const TabGroup: React.FC<TabGroupProps> = ({
         <SwipeableViews
           views={children}
           onSwipe={handleSwipe}
-          selectedView={children.map(child => child.props.label).indexOf(value)}
+          selectedView={children
+            .map((child) => child.props.label)
+            .indexOf(value)}
           inkBarRef={inkBarRef}
           blacklistedElement={blacklistedElement}
           // selectedTabName={value}
