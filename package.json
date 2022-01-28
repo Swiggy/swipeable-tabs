@@ -16,7 +16,7 @@
     "types": "dist/index.d.js",
     "license": "MIT",
     "scripts": {
-        "start": "NODE_ENV=development parcel example/index.html --no-cache -d example/build",
+        "start": "NODE_ENV=development parcel example/index.html --no-cache example/build",
         "build": "webpack -p",
         "build:analyze": "ANALYZE=true webpack -p",
         "build:watch": "NODE_ENV=development webpack --watch",
@@ -41,6 +41,7 @@
         "babel-loader": "^8.2.3",
         "clean-webpack-plugin": "^3.0.0",
         "compression-webpack-plugin": "^3.0.0",
+        "parcel": "^2.2.1",
         "path": "^0.12.7",
         "ts-loader": "^6.2.1",
         "ts-node": "^10.4.0",

@@ -91,7 +91,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
   
   const isTargetBlacklisted = useCallback(
     (e) => {
-      if (backlisters.length > 0) {
+      if (backlisters.length === 0) {
         return false;
       }
       const isBlocked = e.path.some(
