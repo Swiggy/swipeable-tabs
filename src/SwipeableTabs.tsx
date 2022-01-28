@@ -19,7 +19,7 @@ type ITouchData = {
   pointerActive: boolean;
 };
 
-type BlackListHint = {
+export type BlackListHint = {
   identifierType: "className" | "id" | "nodeName";
   identifierName: string;
 };

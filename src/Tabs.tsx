@@ -1,15 +1,10 @@
-import React, { useCallback, useRef, memo, useEffect } from "react";
+import React, { memo, useCallback, useEffect, useRef } from "react";
 import {
-  TabsList,
-  TabSelector as TabInkBar,
-  TabGroupContainer,
-  TabPane as TabsNavbar,
-  ViewPane,
-  defaultTabBarStyle,
-  TabBarStyle
+  TabBarStyle, TabGroupContainer,
+  TabPane as TabsNavbar, TabSelector as TabInkBar, TabsList, ViewPane
 } from "./styles";
-import { SwipeableViews } from "./SwipeableTabs";
-import { Tab, TabHeader, TabProps } from "./Tab";
+import { BlackListHint, SwipeableViews } from "./SwipeableTabs";
+import { TabHeader, TabProps } from "./Tab";
 
 type TabGroupProps = {
   value: string;
@@ -18,10 +13,7 @@ type TabGroupProps = {
   children: Array<React.FunctionComponentElement<TabProps>>;
   tabBarCSS?: string;
   tabItemCSS?: string;
-  blacklistedElement?: {
-    identifierType: "className" | "id" | "nodeName";
-    identifierName: string;
-  };
+  blacklistedElement?: BlackListHint[] | BlackListHint;
 };
 
 const TabGroup: React.FC<TabGroupProps> = ({
@@ -31,7 +23,7 @@ const TabGroup: React.FC<TabGroupProps> = ({
   styleProps = {},
   tabBarCSS = "",
   tabItemCSS = "",
-  blacklistedElement = undefined
+  blacklistedElement,
 }) => {
   const inkBarRef = useRef<HTMLHRElement>(null);
   const tabLabels = useRef<Array<string>>([]);
