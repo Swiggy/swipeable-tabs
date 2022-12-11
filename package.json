@@ -1,6 +1,6 @@
 {
     "name": "@petite-org/swipeable-tabs",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "description": "React Tabs Component That supports Swiping across screen to switch tabs",
     "keywords": [
         "react",
