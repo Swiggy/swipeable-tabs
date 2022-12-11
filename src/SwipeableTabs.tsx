@@ -30,6 +30,7 @@ type SwipeViewProps = {
   blacklistedElement?: BlackListHint[] | BlackListHint;
   inkBarRef: any;
   selectedView: number;
+  transitionCss?: string;
   // tabLabels: React.MutableRefObject<string[]>;
   // selectedTabName: string;
 };
@@ -56,12 +57,15 @@ const SwipeView = styled.section<{ viewCount }>`
   overflow-y: auto;
 `;
 
+const defaultTransitionCss = "0.1s ease-in-out";
+
 const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
   props: SwipeViewProps
 ) => {
-  const { views, onSwipe, inkBarRef: hrRef, selectedView, blacklistedElement } = props;
+  const { views, onSwipe, inkBarRef: hrRef, selectedView, blacklistedElement, transitionCss = defaultTransitionCss} = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const touchData = useRef<ITouchData>();
+    
   const isExtreme = useCallback(
     e => {
       if (!touchData.current) return;
@@ -202,7 +206,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
           touchData.current.deltaX) /
           viewWidth) *
           hrRef.current.clientWidth}px`;
-        hrRef.current.style.transition = "0.1s ease-in-out";
+        hrRef.current.style.transition = transitionCss;
       }
     },
     [touchData, containerRef, selectedView, views, isExtreme, hrRef]
@@ -247,8 +251,10 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         return;
       }
       const el = containerRef.current;
-      if (!el || isExtreme(e)) return;
-      el.style.transition = `0.1s ease-in-out`;
+      if (!el || isExtreme(e)) {
+        return;
+      }
+      el.style.transition = transitionCss;
 
       const viewWidth =
         safeGet(containerRef, "current.clientWidth", 0) / views.length;
@@ -277,10 +283,12 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
 
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     // const selectedTab =  tabLabels.current.indexOf(selectedTabName);
     el.style.transform = `translateX(-${(selectedView / views.length) * 100}%)`;
-    el.style.transition = "0.1s ease-in-out";
+    el.style.transition = transitionCss;
   }, [selectedView, containerRef, views]);
 
   useEffect(() => {
