@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, memo } from "react";
+import React, { useRef, useEffect, useCallback, memo, useMemo } from "react";
 import styled from "@emotion/styled";
 import safeGet from "./safeGet";
 
@@ -19,15 +19,18 @@ type ITouchData = {
   pointerActive: boolean;
 };
 
+export type BlackListHint = {
+  identifierType: "className" | "id" | "nodeName";
+  identifierName: string;
+};
+
 type SwipeViewProps = {
   views: JSX.Element[];
   onSwipe: (selectedTab: number) => void;
-  blacklistedElement?: {
-    identifierType: "className" | "id" | "nodeName";
-    identifierName: string;
-  };
+  blacklistedElement?: BlackListHint[] | BlackListHint;
   inkBarRef: any;
   selectedView: number;
+  transitionCss?: string;
   // tabLabels: React.MutableRefObject<string[]>;
   // selectedTabName: string;
 };
@@ -54,12 +57,15 @@ const SwipeView = styled.section<{ viewCount }>`
   overflow-y: auto;
 `;
 
+const defaultTransitionCss = "0.1s ease-in-out";
+
 const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
   props: SwipeViewProps
 ) => {
-  const { views, onSwipe, inkBarRef: hrRef, selectedView } = props;
+  const { views, onSwipe, inkBarRef: hrRef, selectedView, blacklistedElement, transitionCss = defaultTransitionCss} = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const touchData = useRef<ITouchData>();
+    
   const isExtreme = useCallback(
     e => {
       if (!touchData.current) return;
@@ -67,35 +73,45 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
       if (
         (selectedView === 0 &&
           Math.abs(touchData.current.deltaX) /
-            safeGet(touchData, "current.deltaX", 1) ===
-            1) ||
+          safeGet(touchData, "current.deltaX", 1) ===
+          1) ||
         (selectedView === views.length - 1 &&
           Math.abs(touchData.current.deltaX) /
-            safeGet(touchData, "current.deltaX", 1) ===
-            -1)
+          safeGet(touchData, "current.deltaX", 1) ===
+          -1)
       )
         return true;
       return false;
     },
     [selectedView, views, touchData]
   );
-
+  
+  const backlisters = useMemo(() => {
+    if (blacklistedElement) {
+      return Array.isArray(blacklistedElement) ? blacklistedElement : [blacklistedElement];
+    }
+    return [];
+  }, [props.blacklistedElement]);
+  
   const isTargetBlacklisted = useCallback(
-    e => {
-      if (!props.blacklistedElement) return false;
-      const isBlocked = e.path.filter(
-        item =>
-          safeGet(item, `${props.blacklistedElement!.identifierType}`) ===
-          props.blacklistedElement!.identifierName
+    (e) => {
+      if (backlisters.length === 0) {
+        return false;
+      }
+      const isBlocked = e.path.some(
+        item => {
+          return backlisters.some(e => safeGet(item, `${e.identifierType}`) === e.identifierName);
+        }
       );
-      return isBlocked.length > 0;
+      return isBlocked;
     },
-    [props.blacklistedElement]
+    [backlisters]
   );
 
   const handlePanStart = useCallback(
     (e: TouchEvent | PointerEvent | MouseEvent) => {
-      let currentX, currentY;
+      let currentX: number;
+      let currentY: number;
       if (e.type === "touchstart") {
         currentX = (e as TouchEvent).changedTouches[0].pageX;
         currentY = (e as TouchEvent).changedTouches[0].pageY;
@@ -120,7 +136,9 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         pointerActive: true
       };
       const el = containerRef.current;
-      if (!el) return;
+      if (!el) {
+        return;
+      }
       el.style.transition = `none`;
     },
     [touchData, containerRef]
@@ -129,8 +147,11 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
   const handlePanMove = useCallback(
     (e: TouchEvent | PointerEvent | MouseEvent) => {
       //   e.preventDefault();
-      if (!safeGet(touchData, "current.pointerActive", false)) return;
-      let currentX, currentY;
+      if (!safeGet(touchData, "current.pointerActive", false)) {
+        return;
+      }
+      let currentX: number;
+      let currentY: number;
       if (e.type === "touchmove") {
         currentX = (e as TouchEvent).changedTouches[0].pageX;
         currentY = (e as TouchEvent).changedTouches[0].pageY;
@@ -140,8 +161,12 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
       }
       // const selectedTab = tabLabels.current.indexOf(selectedTabName);
 
-      if (!touchData.current) return;
-      if (touchData.current.isTargetBlacklisted) return;
+      if (!touchData.current) {
+        return;
+      }
+      if (touchData.current.isTargetBlacklisted) {
+        return;
+      }
       touchData.current = {
         ...touchData.current,
         target: e.target as HTMLElement,
@@ -181,7 +206,7 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
           touchData.current.deltaX) /
           viewWidth) *
           hrRef.current.clientWidth}px`;
-        hrRef.current.style.transition = "0.1s ease-in-out";
+        hrRef.current.style.transition = transitionCss;
       }
     },
     [touchData, containerRef, selectedView, views, isExtreme, hrRef]
@@ -226,8 +251,10 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
         return;
       }
       const el = containerRef.current;
-      if (!el || isExtreme(e)) return;
-      el.style.transition = `0.1s ease-in-out`;
+      if (!el || isExtreme(e)) {
+        return;
+      }
+      el.style.transition = transitionCss;
 
       const viewWidth =
         safeGet(containerRef, "current.clientWidth", 0) / views.length;
@@ -256,15 +283,19 @@ const SwipeableViewsComponent: React.FC<SwipeViewProps> = (
 
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     // const selectedTab =  tabLabels.current.indexOf(selectedTabName);
     el.style.transform = `translateX(-${(selectedView / views.length) * 100}%)`;
-    el.style.transition = "0.1s ease-in-out";
+    el.style.transition = transitionCss;
   }, [selectedView, containerRef, views]);
 
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     el.addEventListener("touchstart", handlePanStart, false);
     el.addEventListener("touchend", handlePanEnd, false);
     el.addEventListener("touchcancel", handlePanEnd, false);

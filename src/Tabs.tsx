@@ -1,15 +1,10 @@
-import React, { useCallback, useRef, memo, useEffect } from "react";
+import React, { memo, useCallback, useEffect, useRef } from "react";
 import {
-  TabsList,
-  TabSelector as TabInkBar,
-  TabGroupContainer,
-  TabPane as TabsNavbar,
-  ViewPane,
-  defaultTabBarStyle,
-  TabBarStyle
+  TabBarStyle, TabGroupContainer,
+  TabPane as TabsNavbar, TabSelector as TabInkBar, TabsList, ViewPane
 } from "./styles";
-import { SwipeableViews } from "./SwipeableTabs";
-import { Tab, TabHeader, TabProps } from "./Tab";
+import { BlackListHint, SwipeableViews } from "./SwipeableTabs";
+import { TabHeader, TabProps } from "./Tab";
 
 type TabGroupProps = {
   value: string;
@@ -18,10 +13,8 @@ type TabGroupProps = {
   children: Array<React.FunctionComponentElement<TabProps>>;
   tabBarCSS?: string;
   tabItemCSS?: string;
-  blacklistedElement?: {
-    identifierType: "className" | "id" | "nodeName";
-    identifierName: string;
-  };
+  blacklistedElement?: BlackListHint[] | BlackListHint;
+  transitionCss?: string;
 };
 
 const TabGroup: React.FC<TabGroupProps> = ({
@@ -31,7 +24,8 @@ const TabGroup: React.FC<TabGroupProps> = ({
   styleProps = {},
   tabBarCSS = "",
   tabItemCSS = "",
-  blacklistedElement = undefined
+  blacklistedElement,
+  transitionCss,
 }) => {
   const inkBarRef = useRef<HTMLHRElement>(null);
   const tabLabels = useRef<Array<string>>([]);
@@ -95,13 +89,14 @@ const TabGroup: React.FC<TabGroupProps> = ({
       </TabsNavbar>
       <ViewPane>
         <SwipeableViews
+          transitionCss={transitionCss}
           views={children}
           onSwipe={handleSwipe}
           selectedView={children.map(child => child.props.label).indexOf(value)}
           inkBarRef={inkBarRef}
           blacklistedElement={blacklistedElement}
-          // selectedTabName={value}
-          // tabLabels={tabLabels}
+        // selectedTabName={value}
+        // tabLabels={tabLabels}
         />
       </ViewPane>
     </TabGroupContainer>
