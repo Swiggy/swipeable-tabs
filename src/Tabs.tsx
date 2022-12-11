@@ -14,6 +14,7 @@ type TabGroupProps = {
   tabBarCSS?: string;
   tabItemCSS?: string;
   blacklistedElement?: BlackListHint[] | BlackListHint;
+  transitionCss?: string;
 };
 
 const TabGroup: React.FC<TabGroupProps> = ({
@@ -24,6 +25,7 @@ const TabGroup: React.FC<TabGroupProps> = ({
   tabBarCSS = "",
   tabItemCSS = "",
   blacklistedElement,
+  transitionCss,
 }) => {
   const inkBarRef = useRef<HTMLHRElement>(null);
   const tabLabels = useRef<Array<string>>([]);
@@ -87,13 +89,14 @@ const TabGroup: React.FC<TabGroupProps> = ({
       </TabsNavbar>
       <ViewPane>
         <SwipeableViews
+          transitionCss={transitionCss}
           views={children}
           onSwipe={handleSwipe}
           selectedView={children.map(child => child.props.label).indexOf(value)}
           inkBarRef={inkBarRef}
           blacklistedElement={blacklistedElement}
-          // selectedTabName={value}
-          // tabLabels={tabLabels}
+        // selectedTabName={value}
+        // tabLabels={tabLabels}
         />
       </ViewPane>
     </TabGroupContainer>
